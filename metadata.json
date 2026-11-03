@@ -1,0 +1,5 @@
+{
+  "name": "CampusMate AI — CSDX 142 Intelligent College Assistant",
+  "description": "Zero-cost local NLP, TF-IDF retrieval, and finite-state dialogue chatbot built for CSDX 142 AI Chatbot Application.",
+  "requestFramePermissions": []
+}
