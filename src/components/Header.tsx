@@ -2,7 +2,6 @@ import React from 'react';
 
 export type ActiveTab =
   | 'chat'
-  | 'ppt'
   | 'how-it-works'
   | 'quiz'
   | 'knowledge-base'
@@ -16,10 +15,10 @@ interface HeaderProps {
 
 const NAV_ITEMS: { id: ActiveTab; label: string }[] = [
   { id: 'chat', label: 'Chat' },
-  { id: 'ppt', label: 'PPT Deck' },
   { id: 'how-it-works', label: 'How It Works' },
   { id: 'quiz', label: 'Quiz & Prep' },
-  { id: 'analytics', label: 'Benchmark & KB' }
+  { id: 'knowledge-base', label: 'Knowledge Base' },
+  { id: 'analytics', label: 'Benchmark' }
 ];
 
 export const Header: React.FC<HeaderProps> = ({
@@ -45,9 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
           className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-400"
         >
           {NAV_ITEMS.map((item) => {
-            const isActive =
-              activeTab === item.id ||
-              (item.id === 'analytics' && activeTab === 'knowledge-base');
+            const isActive = activeTab === item.id;
             return (
               <button
                 key={item.id}
