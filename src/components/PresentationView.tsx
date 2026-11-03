@@ -2,22 +2,16 @@ import React, { useState, useEffect } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
-  Download,
   Maximize2,
   Minimize2,
   Mic,
-  Presentation,
-  CheckCircle2,
-  Sparkles,
   FileDown
 } from 'lucide-react';
-import PptxGenJS from 'pptxgenjs';
 import { PRESENTATION_SLIDES } from '../data/presentationSlides';
 
 export const PresentationView: React.FC = () => {
   const [currentSlideIdx, setCurrentSlideIdx] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isGeneratingPptx, setIsGeneratingPptx] = useState(false);
 
   const slide = PRESENTATION_SLIDES[currentSlideIdx];
   const totalSlides = PRESENTATION_SLIDES.length;
@@ -35,145 +29,6 @@ export const PresentationView: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [totalSlides, isFullscreen]);
-
-  const handleDownloadPptx = async () => {
-    setIsGeneratingPptx(true);
-    try {
-      const pptx = new PptxGenJS();
-      pptx.layout = 'LAYOUT_WIDE'; // 13.33 x 7.5 inches widescreen
-      pptx.author = 'CampusMate AI — CSDX 142';
-      pptx.company = 'CSDX 142 AI Chatbot Application';
-      pptx.subject = 'CampusMate AI Zero-Cost Intelligent College Chatbot';
-      pptx.title = 'CampusMate AI — CSDX 142 Project Presentation';
-
-      for (const s of PRESENTATION_SLIDES) {
-        const pSlide = pptx.addSlide();
-        pSlide.background = { color: '0F172A' }; // Deep slate executive presentation theme
-
-        // Top Kicker Badge
-        pSlide.addText(`${s.kicker}  |  CSDX 142: AI Chatbot Application`, {
-          x: 0.5,
-          y: 0.35,
-          w: 12.3,
-          h: 0.3,
-          fontSize: 11,
-          bold: true,
-          color: '38BDF8',
-          fontFace: 'Arial'
-        });
-
-        // Slide Title
-        pSlide.addText(s.title, {
-          x: 0.5,
-          y: 0.68,
-          w: 12.3,
-          h: 0.55,
-          fontSize: 22,
-          bold: true,
-          color: 'F8FAFC',
-          fontFace: 'Arial'
-        });
-
-        // Easy Summary Box
-        pSlide.addText(s.easySummary, {
-          x: 0.5,
-          y: 1.28,
-          w: 12.3,
-          h: 0.5,
-          fontSize: 12,
-          italic: true,
-          color: 'CBD5E1',
-          fontFace: 'Arial'
-        });
-
-        // Left Column: Key Explanation Bullets
-        const bulletItems = s.bulletPoints.map((bp) => ({
-          text: bp,
-          options: { bullet: true, breakLine: true }
-        }));
-
-        pSlide.addText(bulletItems, {
-          x: 0.5,
-          y: 1.9,
-          w: 6.2,
-          h: 3.3,
-          fontSize: 12,
-          color: 'E2E8F0',
-          fontFace: 'Arial',
-          lineSpacingMultiple: 1.25,
-          valign: 'top'
-        });
-
-        // Bottom Left Highlight Box
-        pSlide.addShape(pptx.ShapeType.roundRect, {
-          x: 0.5,
-          y: 5.3,
-          w: 6.2,
-          h: 1.65,
-          fill: { color: '1E293B' },
-          line: { color: '0284C7', width: 1 }
-        });
-
-        pSlide.addText(
-          `${s.highlightTitle}\n` + s.highlightPoints.map((hp) => `• ${hp}`).join('\n'),
-          {
-            x: 0.65,
-            y: 5.38,
-            w: 5.9,
-            h: 1.5,
-            fontSize: 10.5,
-            color: 'BAE6FD',
-            fontFace: 'Arial',
-            lineSpacingMultiple: 1.2,
-            valign: 'top'
-          }
-        );
-
-        // Right Column: Embedded Real Screenshot of Our Chatbot
-        try {
-          pSlide.addImage({
-            path: s.imageUrl,
-            x: 6.95,
-            y: 1.9,
-            w: 5.85,
-            h: 3.65
-          });
-        } catch {
-          // Fallback if image path cannot be fetched in offline mode
-        }
-
-        // Caption below Screenshot
-        pSlide.addText(s.imageCaption, {
-          x: 6.95,
-          y: 5.65,
-          w: 5.85,
-          h: 0.45,
-          fontSize: 9.5,
-          color: '94A3B8',
-          fontFace: 'Arial'
-        });
-
-        // Speaker Script Box on Right Bottom
-        pSlide.addText(`Viva Script: ${s.speakerScript}`, {
-          x: 6.95,
-          y: 6.1,
-          w: 5.85,
-          h: 0.85,
-          fontSize: 9,
-          italic: true,
-          color: '64748B',
-          fontFace: 'Arial'
-        });
-
-        // Add full speaker notes to PowerPoint Presenter View
-        pSlide.addNotes(`${s.title}\n\nWhat to say to the examiner:\n${s.speakerScript}`);
-      }
-
-      await pptx.writeFile({ fileName: 'CampusMate_AI_CSDX142_Presentation.pptx' });
-    } finally {
-      setIsGeneratingPptx(false);
-    }
-  };
 
   return (
     <div
@@ -199,19 +54,14 @@ export const PresentationView: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
-          <button
-            type="button"
-            onClick={handleDownloadPptx}
-            disabled={isGeneratingPptx}
+          <a
+            href="./CampusMate_AI_CSDX142_Presentation.pptx"
+            download="CampusMate_AI_CSDX142_Presentation.pptx"
             className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors shadow-xs cursor-pointer"
           >
             <FileDown className="w-4 h-4" />
-            <span>
-              {isGeneratingPptx
-                ? 'Generating .PPTX File...'
-                : 'Download PowerPoint (.pptx) with Images'}
-            </span>
-          </button>
+            <span>Download PowerPoint (.pptx) with Images</span>
+          </a>
 
           <button
             type="button"
