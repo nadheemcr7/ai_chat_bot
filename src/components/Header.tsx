@@ -1,6 +1,12 @@
 import React from 'react';
 
-export type ActiveTab = 'chat' | 'how-it-works' | 'quiz' | 'knowledge-base' | 'analytics';
+export type ActiveTab =
+  | 'chat'
+  | 'ppt'
+  | 'how-it-works'
+  | 'quiz'
+  | 'knowledge-base'
+  | 'analytics';
 
 interface HeaderProps {
   activeTab: ActiveTab;
@@ -10,10 +16,10 @@ interface HeaderProps {
 
 const NAV_ITEMS: { id: ActiveTab; label: string }[] = [
   { id: 'chat', label: 'Chat' },
+  { id: 'ppt', label: 'PPT Deck' },
   { id: 'how-it-works', label: 'How It Works' },
   { id: 'quiz', label: 'Quiz & Prep' },
-  { id: 'knowledge-base', label: 'Knowledge Base' },
-  { id: 'analytics', label: 'Analytics & Report' }
+  { id: 'analytics', label: 'Benchmark & KB' }
 ];
 
 export const Header: React.FC<HeaderProps> = ({
@@ -28,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           type="button"
           onClick={() => onSelectTab('chat')}
-          className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100 whitespace-nowrap shrink-0 text-left focus-visible:outline-2 focus-visible:outline-sky-600"
+          className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100 whitespace-nowrap shrink-0 text-left focus-visible:outline-2 focus-visible:outline-sky-600 cursor-pointer"
         >
           CampusMate AI
         </button>
@@ -39,14 +45,16 @@ export const Header: React.FC<HeaderProps> = ({
           className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-400"
         >
           {NAV_ITEMS.map((item) => {
-            const isActive = activeTab === item.id;
+            const isActive =
+              activeTab === item.id ||
+              (item.id === 'analytics' && activeTab === 'knowledge-base');
             return (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => onSelectTab(item.id)}
                 aria-current={isActive ? 'page' : undefined}
-                className={`py-1 transition-colors whitespace-nowrap shrink-0 border-b-2 ${
+                className={`py-1 transition-colors whitespace-nowrap shrink-0 border-b-2 cursor-pointer ${
                   isActive
                     ? 'border-sky-600 dark:border-sky-400 text-slate-900 dark:text-slate-100 font-semibold'
                     : 'border-transparent hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
@@ -63,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={onRunDemoQuery}
-            className="px-4 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-400 dark:text-slate-950 rounded-lg transition-colors whitespace-nowrap shrink-0 shadow-xs"
+            className="px-4 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-400 dark:text-slate-950 rounded-lg transition-colors whitespace-nowrap shrink-0 shadow-xs cursor-pointer"
           >
             Run Demo Query
           </button>
@@ -76,7 +84,9 @@ export const Header: React.FC<HeaderProps> = ({
         className="flex md:hidden items-center gap-4 overflow-x-auto px-4 py-2 border-t border-slate-100 dark:border-slate-800/80 text-xs font-medium text-slate-600 dark:text-slate-400"
       >
         {NAV_ITEMS.map((item) => {
-          const isActive = activeTab === item.id;
+          const isActive =
+            activeTab === item.id ||
+            (item.id === 'analytics' && activeTab === 'knowledge-base');
           return (
             <button
               key={item.id}

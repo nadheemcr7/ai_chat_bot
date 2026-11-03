@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header, ActiveTab } from './components/Header';
 import { ChatWorkspace } from './components/ChatWorkspace';
+import { PresentationView } from './components/PresentationView';
 import { HowItWorksView } from './components/HowItWorksView';
 import { QuizAndInterviewView } from './components/QuizAndInterviewView';
 import { KnowledgeBaseView } from './components/KnowledgeBaseView';
@@ -206,6 +207,8 @@ export function App() {
           />
         )}
 
+        {activeTab === 'ppt' && <PresentationView />}
+
         {activeTab === 'how-it-works' && (
           <HowItWorksView onTryInChat={handleTryQueryFromOtherTab} />
         )}
@@ -213,22 +216,44 @@ export function App() {
         {activeTab === 'quiz' && <QuizAndInterviewView />}
 
         {activeTab === 'knowledge-base' && (
-          <KnowledgeBaseView
-            entries={knowledgeBase}
-            onAddEntry={handleAddKnowledgeEntry}
-            onDeleteCustomEntry={handleDeleteCustomEntry}
-            onImportEntries={handleImportEntries}
-            onAskInChat={handleTryQueryFromOtherTab}
-          />
+          <div className="space-y-4">
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 pt-4 flex items-center justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveTab('analytics')}
+                className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-sky-600 hover:text-white transition-colors"
+              >
+                Switch to 16-Query Benchmark &amp; Analytics &rarr;
+              </button>
+            </div>
+            <KnowledgeBaseView
+              entries={knowledgeBase}
+              onAddEntry={handleAddKnowledgeEntry}
+              onDeleteCustomEntry={handleDeleteCustomEntry}
+              onImportEntries={handleImportEntries}
+              onAskInChat={handleTryQueryFromOtherTab}
+            />
+          </div>
         )}
 
         {activeTab === 'analytics' && (
-          <AnalyticsAndEvalView
-            messages={messages}
-            knowledgeBase={knowledgeBase}
-            confidenceThreshold={confidenceThreshold}
-            onRunQueryInChat={handleTryQueryFromOtherTab}
-          />
+          <div className="space-y-2">
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 pt-4 flex items-center justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveTab('knowledge-base')}
+                className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white dark:bg-sky-500 dark:text-slate-950 hover:bg-sky-700 transition-colors cursor-pointer"
+              >
+                Open JSON Knowledge Base Editor (Add / Import FAQs) &rarr;
+              </button>
+            </div>
+            <AnalyticsAndEvalView
+              messages={messages}
+              knowledgeBase={knowledgeBase}
+              confidenceThreshold={confidenceThreshold}
+              onRunQueryInChat={handleTryQueryFromOtherTab}
+            />
+          </div>
         )}
       </main>
 
